@@ -1,0 +1,69 @@
+<div class="container">
+
+  <div>
+    <nav-bar admin-role="vm.currentUser.role === 1"></nav-bar>
+  </div>
+
+  <button type="button" class="btn btn-primary" ng-click="vm.bugModalOpen()"><i class="glyphicon glyphicon-plus mr10"></i>Bug</button>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th ng-click="vm.sortBy('name')">Bug name <i class="glyphicon glyphicon-sort"></i></th>
+        <th ng-click="vm.sortBy('description')">description <i class="glyphicon glyphicon-sort"></i></th>
+        <th ng-click="vm.sortBy('priority')">Priority <i class="glyphicon glyphicon-sort"></i></th>
+        <th ng-click="vm.sortBy('status')">Status <i class="glyphicon glyphicon-sort"></i></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr ng-repeat="bug in vm.bugList | orderBy:vm.filter:vm.reverse track by $index" ng-click="vm.bugModalOpen(bug, $index)">
+        <td>{{bug.name}}</td>
+        <td>{{bug.description}}</td>
+        <td><span ng-class="vm.priorityClass(bug.priority)">{{vm.priorities[bug.priority]}}</span></td>
+        <td><span ng-class="vm.statusClass(bug.status)">{{vm.statuses[bug.status]}}</span></td>
+        <td>
+          <i class="glyphicon glyphicon-edit"></i>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<script type="text/ng-template" id="addNewBugModal.html">
+  <div class="modal-header">
+    <h3 class="modal-title" id="modal-title">Bug</h3>
+  </div>
+  <div class="modal-body" id="modal-body">
+    <form role="create new bug" name="createNewBug">
+      <div class="form-group">
+        <label for="bugName">Bug name</label>
+        <input type="text" ng-model="vm.bugName" class="form-control" id="bugName" placeholder="name" required/>
+      </div>
+      <div class="form-group">
+        <label for="bugDescription">Bug description</label>
+        <textarea type="password" ng-model="vm.bugDesc" class="form-control" id="exampleInputPassword1" placeholder="description" required/>
+      </div>
+      <div class="form-group">
+        <label for="priority">Priority</label>
+        <select id="priority" ng-model="vm.priority"
+          ng-options="vm.lookupCode as vm.description for vm in vm.priorities" required></select>
+      </div>
+      <div class="form-group">
+        <label for="status">Status</label>
+        <select id="status" ng-model="vm.status"
+          ng-options="vm.lookupCode as vm.description for vm in vm.statuses" required></select>
+      </div>
+      <div class="form-group" ng-if="vm.allProductEngineers.length">
+        <label for="assignedTo">Assign to</label>
+        <select id="assignedTo" ng-model="vm.assignedTo"
+          ng-options="vm.username as vm.username for vm in vm.allProductEngineers" required></select>
+      </div>
+      <p class="text-warning" ng-if="!vm.allProductEngineers.length">Please add product engineers to assign bugs</p>
+
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-disabled="createNewBug.$invalid" ng-click="vm.addNewBug()">OK</button>
+    <button class="btn btn-warning" type="button" ng-click="vm.cancel()">Cancel</button>
+  </div>
+</script>

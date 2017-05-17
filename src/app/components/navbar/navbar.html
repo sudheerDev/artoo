@@ -1,0 +1,10 @@
+<nav class="navbar">
+  <a href="#/">Ticket sys</a>
+
+  <ul>
+    <li class="active" ng-if="vm.adminRole"><a ng-href="#/users">Manage Users</a></li>
+  </ul>
+  <ul class="pull-right">
+    <li class="active pull-right"><a ng-click="vm.logout()">Logout</a></li>
+  </ul>
+</nav>
